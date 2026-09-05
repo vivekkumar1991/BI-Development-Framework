@@ -37,6 +37,7 @@ work. Specialists also self-check against the relevant items before handoff.
 - [ ] No embedded credentials in the `.rdl`. *(BLOCKER if violated)*
 - [ ] Layout renders sensibly; expressions kept simple.
 - [ ] Report spec/parameters documented.
+- [ ] Structural RDL validation done by AI; visual/render verification is a developer/SSDT step.
 
 ## SQL checklist
 

@@ -1,0 +1,5 @@
+{
+  "_note": "Copy this file to workspace.config.json (gitignored) and set your local path. Local path only — never add server names, credentials, connection strings, or secrets.",
+  "projectRoot": "<ABSOLUTE_PATH_TO_FOLDER_CONTAINING_.sln_OR_.rptproj>",
+  "projectFile": "<OPTIONAL: MyReports.sln or MyReports.rptproj>"
+}

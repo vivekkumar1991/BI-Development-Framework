@@ -29,15 +29,36 @@ SSDT, subscriptions, report layout — for any of Create / Modify / Analyze / De
 | **Debug** | Diagnose rendering issues, parameter/data mismatches, or dataset errors; propose a fix. |
 | **Optimize** | Improve query/dataset performance, reduce render time, simplify expressions. |
 
+## Local workspace setup (one-time, required before editing real reports)
+
+Before the agent may **Modify / Debug / Optimize** an actual `.rdl`, the developer completes
+a one-time local setup so the agent knows where the SSDT/SSRS project lives:
+
+1. Copy [`../SSRS/workspace.config.example.json`](../SSRS/workspace.config.example.json) to
+   `SSRS/workspace.config.json` (this file is **gitignored** — never committed).
+2. Set `projectRoot` to the local folder containing the `.sln` / `.rptproj`. Local path only —
+   no server names, credentials, or secrets (see [`security.md`](../instructions/security.md)).
+
+If `SSRS/workspace.config.json` is missing, the agent **stops and asks the developer to
+complete this setup** — it does not proceed to edit reports. Different developers may point at
+different VM/VDI paths and different SSRS projects; the config is per-developer, so the
+framework stays portable.
+
 ## Workflow
 
 1. Confirm the brief and the definition of done.
 2. Load [`../instructions/development-standards.md`](../instructions/development-standards.md)
    (SSRS section) and relevant `../templates/ssrs/` scaffolds.
-3. Produce the deliverable (report spec, dataset query, parameter design, or change description).
-4. Self-check against the SSRS validation items (parameterized datasets, no embedded creds).
-5. **Hand off to the [Validation Agent](validation-agent.md).**
-6. Update documentation; report what remains user-gated (commit/deploy/subscription).
+3. **Precheck (before any edit):** read `SSRS/workspace.config.json`; verify `projectRoot`
+   exists and contains a `.sln`/`.rptproj`; verify the target `.rdl` exists under `projectRoot`.
+   If any check fails, stop and report — do not edit.
+4. Produce the deliverable:
+   - **Create / Analyze:** report spec, dataset query, parameter design (or documentation).
+   - **Modify / Debug / Optimize:** edit the `.rdl` **in place** at its path under `projectRoot`
+     so changes are immediately visible in SSDT/SSRS. Do not copy RDLs into the repo workspace.
+5. Self-check: parameterized datasets, no embedded creds, well-formed RDL/structure.
+6. **Hand off to the [Validation Agent](validation-agent.md).**
+7. Update documentation; report what remains user-gated (commit/deploy/subscription).
 
 ## Guardrails
 
@@ -47,6 +68,10 @@ no secrets, `README.md` untouched, no unrequested business reports). SSRS specif
 
 - Dataset queries must be **parameterized** — never build SQL by string concatenation.
 - No embedded credentials in an `.rdl`; never deploy to a report server unless the user asks.
+- Operate only within the configured `projectRoot`: never modify, delete, move, deploy, or
+  overwrite files outside it.
+- AI performs **structural** RDL validation only; **visual/render** verification is a
+  developer step in SSDT.
 
 ## Outputs
 

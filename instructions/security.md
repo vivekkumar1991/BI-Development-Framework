@@ -18,6 +18,8 @@ violations here as **BLOCKERs**.
   `<CONNECTION_STRING>`, `<SERVER>`, `<DATABASE>`, `<USERNAME>`.
 - Real values belong in environment variables, a secrets manager, or the platform's
   credential store — **never** in the repo.
+- Developer-specific local values (project paths, server names, local config) live only in a
+  gitignored local file (e.g. `SSRS/workspace.config.json`) — never committed.
 - SSRS: use shared/stored data sources with server-managed credentials; never embed credentials
   in an `.rdl`.
 - Power BI: manage gateway/credentials in the Service, not in committed files.
