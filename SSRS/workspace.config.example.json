@@ -1,0 +1,22 @@
+{
+  "_note": "Copy to workspace.config.json (gitignored). Developer-local only. No secrets: no passwords, tokens, or connection strings containing credentials. Prefer approved auth (Windows/SSO/env/credential-manager/org secret provider).",
+
+  "projectRoot": "<ABSOLUTE_PATH_TO_FOLDER_CONTAINING_.sln_OR_.rptproj>",
+  "projectFile": "<OPTIONAL: MyReports.sln or MyReports.rptproj>",
+
+  "_connections_note": "Model: Logical Data Source -> Connection Profile -> Physical Environment. The physical host/server stays developer-local; other developers map the same logical name to their own environment. Never commit real server names or secrets.",
+
+  "connectionProfiles": {
+    "<profile-name e.g. local-sales-sql>": {
+      "engine": "<sqlserver | databricks>",
+      "database": "<DATABASE_OR_CATALOG>",
+      "schema": "<OPTIONAL_SCHEMA>",
+      "auth": "<windows | sso | env | credential-manager | org-secret-provider>",
+      "_endpoint_note": "Physical server/host/http-path lives only in your local copy; prefer approved auth. Never paste passwords or tokens here or into chat."
+    }
+  },
+
+  "logicalDataSources": {
+    "<LogicalDataSourceName e.g. SalesDB>": "<profile-name e.g. local-sales-sql>"
+  }
+}

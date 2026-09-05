@@ -1,0 +1,3 @@
+# Local, developer-specific SSRS workspace config — never commit local paths or secrets
+SSRS/workspace.config.json
+*.local.config.json

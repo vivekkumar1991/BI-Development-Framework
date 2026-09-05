@@ -1,0 +1,22 @@
+# Power BI — Measure Template
+#
+# Structural scaffold only. Copy into a model/measure doc and fill in the placeholders.
+# No real business logic or data belongs in this template.
+
+Measure name : <Business Friendly Name>        // e.g., Total Sales
+Display folder: <Folder>                        // e.g., Sales \ Core
+Format       : <format string>                  // e.g., #,0 ; $#,0.00 ; 0.0%
+Purpose      : <what this measure answers, in business terms>
+Depends on   : <tables/columns/measures referenced>
+
+DAX:
+
+<Measure Name> =
+VAR __Base = <intermediate calculation>          -- use VAR for readability
+VAR __Result = <final calculation using __Base>
+RETURN
+    __Result
+
+Notes:
+- <assumptions, filter context expectations, RLS interactions>
+- <edge cases handled: blanks, first period, division by zero>
