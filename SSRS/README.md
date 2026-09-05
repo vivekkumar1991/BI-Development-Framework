@@ -6,7 +6,9 @@ are created until explicitly requested.
 
 - Entry point for any work: the [Router Agent](../agents/router-agent.md).
 - Specialist: the [SSRS Agent](../agents/ssrs-agent.md).
+- Modular skills: [`skills/`](skills/README.md) (loaded conditionally per request).
 - Scaffolds to start from: [`../templates/ssrs/`](../templates/ssrs/).
+- Workflow overview: [`../docs/ssrs-sql-workflow.md`](../docs/ssrs-sql-workflow.md).
 - **One-time setup** to edit local reports: copy `workspace.config.example.json` to
   `workspace.config.json` (gitignored) and set your local `projectRoot`. See the
   [SSRS Agent](../agents/ssrs-agent.md).
