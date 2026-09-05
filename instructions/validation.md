@@ -41,6 +41,10 @@ work. Specialists also self-check against the relevant items before handoff.
 **Structural RDL validation (AI, after a minimal edit):**
 
 - [ ] `.rdl` is **valid XML** and the RDL **namespace is preserved**.
+- [ ] **Schema-aware:** no element from a newer RDL schema was introduced into an older one.
+      The schema version is detected from the root namespace; every introduced element is
+      checked against it (e.g. 2016/01 `ReportParametersLayout` in a 2010/01 RDL = **BLOCKER**).
+      Reusable mechanism + registry: [`SSRS/validation/`](../SSRS/validation/README.md).
 - [ ] Expected nodes exist for the change (parameter / dataset / tablix / report item).
 - [ ] Parameter, dataset, and data-source references resolve.
 - [ ] Field references resolve where statically checkable.

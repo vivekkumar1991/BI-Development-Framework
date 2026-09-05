@@ -10,6 +10,11 @@ Run **focused structural** RDL checks (visual/render stays a developer/SSDT step
 ## Checks
 
 - [ ] `.rdl` is **valid XML**; RDL **namespace preserved**.
+- [ ] **Schema-compatible** — no element newer than the RDL's detected schema version was
+      introduced (e.g. no 2016/01 `ReportParametersLayout` in a 2010/01 RDL). Run
+      [`../validation/Validate-RdlSchema.ps1`](../validation/Validate-RdlSchema.ps1); the
+      registry [`rdl-schema-compatibility.json`](../validation/rdl-schema-compatibility.json)
+      is the single source of truth. *(BLOCKER if violated — SSDT will reject it)*
 - [ ] Expected node(s) for the change exist and are well-formed.
 - [ ] **Parameter**, **dataset**, and **data-source** references resolve.
 - [ ] **Field** references resolve where statically checkable.

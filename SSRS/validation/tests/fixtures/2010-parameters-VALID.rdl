@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MUST PASS.
+  Valid 2010/01 parameter example: <ReportParameters> with defaults, and NO
+  <ReportParametersLayout>. This is the schema-correct way to add Start/End date
+  parameters to a 2010/01 RDL (parameters render stacked in declaration order).
+-->
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems />
+        <Height>1in</Height>
+      </Body>
+      <Width>6.5in</Width>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="startdate">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=IIf(Weekday(Today())=2,DateAdd("d",-3,Today()),DateAdd("d",-1,Today()))</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Start Date</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="enddate">
+      <DataType>DateTime</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=DateAdd("d",-1,Today())</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>End Date</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+</Report>

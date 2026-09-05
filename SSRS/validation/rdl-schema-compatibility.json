@@ -1,0 +1,29 @@
+{
+  "_comment": "Reusable RDL schema-compatibility registry. SINGLE SOURCE OF TRUTH for which RDL elements are valid in which schema version. This is a version registry, NOT an element blacklist: the validator compares each element's minimum schema version against the version detected from the document's root namespace. Extend `elementMinVersion` (and, if ever needed, `elementMaxVersion`) here instead of hardcoding element checks anywhere else.",
+  "_maintenance": "When a new RDL element is discovered to be gated to a schema version, add one entry to `elementMinVersion` keyed by the element's local name. No code change is required.",
+
+  "schemaVersions": {
+    "http://schemas.microsoft.com/sqlserver/reporting/2003/10/reportdefinition": "2003",
+    "http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition": "2005",
+    "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition": "2008",
+    "http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition": "2010",
+    "http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition": "2016"
+  },
+
+  "versionOrder": ["2003", "2005", "2008", "2010", "2016"],
+
+  "elementMinVersion": {
+    "_note": "Local element name -> minimum RDL schema version in which the element is valid. Elements NOT listed are treated as version-neutral (allowed in any recognized schema). Only list elements that are genuinely gated to a version.",
+
+    "ReportParameters": "2008",
+    "ReportParameter": "2008",
+
+    "ReportSections": "2010",
+    "ReportSection": "2010",
+
+    "ReportParametersLayout": "2016",
+    "GridLayoutDefinition": "2016",
+    "CellDefinitions": "2016",
+    "CellDefinition": "2016"
+  }
+}
