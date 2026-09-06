@@ -15,8 +15,12 @@ RDL** when a targeted change is possible.
    expressions, datasets, parameters, layout, **names/IDs**, and formatting.
 3. Match the file's existing indentation/style; do not reformat untouched regions.
 4. Keep GUIDs/`rd:` designer attributes intact unless the change specifically requires them.
-5. Edit **in place** at the path under `projectRoot` (visible immediately in SSDT).
-6. After editing, expect a **narrow diff** — a broad diff is a red flag; stop and review.
+5. **Preserve the RDL schema version.** Never introduce an element from a newer RDL schema
+   (detected via the root namespace) than the file declares, and never change that namespace,
+   unless the user explicitly requests a schema migration. Validate with
+   [`../validation/Validate-RdlSchema.ps1`](../validation/Validate-RdlSchema.ps1).
+6. Edit **in place** at the path under `projectRoot` (visible immediately in SSDT).
+7. After editing, expect a **narrow diff** — a broad diff is a red flag; stop and review.
 
 ## Output
 
