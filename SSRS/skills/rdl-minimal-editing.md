@@ -43,6 +43,12 @@ For any report-local SQL or structural change, validate the diff boundary before
 - Unrelated framework files.
 
 *Any unexpected diff beyond the strict target scope halts the workflow with `REVIEW_REQUIRED`.*
+5. **Preserve the RDL schema version.** Never introduce an element from a newer RDL schema
+   (detected via the root namespace) than the file declares, and never change that namespace,
+   unless the user explicitly requests a schema migration. Validate with
+   [`../validation/Validate-RdlSchema.ps1`](../validation/Validate-RdlSchema.ps1).
+6. Edit **in place** at the path under `projectRoot` (visible immediately in SSDT).
+7. After editing, expect a **narrow diff** — a broad diff is a red flag; stop and review.
 
 ## Output
 

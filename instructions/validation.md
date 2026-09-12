@@ -68,6 +68,18 @@ work. Specialists also self-check against the relevant items before handoff.
 - [ ] **Parameter References:** All parameter references (`=Parameters!Name.Value` or `.Label`) in dataset query parameters, textboxes, tablix cells, grouping, sorting, calculated fields, visibility, and drillthrough actions resolve to existing defined `<ReportParameter>` elements. *(BLOCKER if unresolvable)*
 - [ ] **Dataset / Query Consistency:** Dataset query parameters map to defined report parameters. Dataset `<Fields>` are structurally valid (`<DataField>` or `<Value>`), and report item `<DataSetName>` references resolve to existing datasets. *(BLOCKER if inconsistent)*
 - [ ] **RDL Structural Integrity:** Valid XML; namespace preserved; required parent/child relationships intact; unique names/IDs within scopes; tablix dimensions consistent. *(BLOCKER if invalid)*
+**Structural RDL validation (AI, after a minimal edit):**
+
+- [ ] `.rdl` is **valid XML** and the RDL **namespace is preserved**.
+- [ ] **Schema-aware:** no element from a newer RDL schema was introduced into an older one.
+      The schema version is detected from the root namespace; every introduced element is
+      checked against it (e.g. 2016/01 `ReportParametersLayout` in a 2010/01 RDL = **BLOCKER**).
+      Reusable mechanism + registry: [`SSRS/validation/`](../SSRS/validation/README.md).
+- [ ] Expected nodes exist for the change (parameter / dataset / tablix / report item).
+- [ ] Parameter, dataset, and data-source references resolve.
+- [ ] Field references resolve where statically checkable.
+- [ ] Group / filter / action (drillthrough, navigation) references remain coherent.
+- [ ] Report item dimensions/positions are valid.
 - [ ] **Unexpected broad diff is rejected** — the change is a targeted patch, unrelated XML
       is untouched (see [`SSRS/skills/rdl-minimal-editing.md`](../SSRS/skills/rdl-minimal-editing.md)). *(BLOCKER if broad diff)*
 - [ ] Visual/render verification is a developer/SSDT step (out of AI scope).
