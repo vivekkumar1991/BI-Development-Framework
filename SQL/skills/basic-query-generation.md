@@ -1,7 +1,7 @@
 # Skill: basic-query-generation
 
 **Domain:** SQL · **Owner:** SQL Agent
-**Load when:** mode is BASIC_PULL.
+**Load when:** operating mode is READ_ONLY and the request is BASIC_PULL.
 
 ## Purpose
 
@@ -15,6 +15,7 @@ Produce the **simplest** read-only query that returns exactly what was asked.
 - **No invented business logic**, calculations, or derived columns unless requested.
 - Schema-qualify objects; parameterize any user-supplied filter value.
 - Use the resolved dialect ([`sql-server`](sql-server.md) / [`databricks`](databricks.md)).
+- Use only objects confirmed in the locked Active Data Source Context.
 
 ## Example shape
 

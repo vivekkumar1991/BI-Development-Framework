@@ -44,8 +44,11 @@ which returns them to the specialist for correction.
 
 - **Power BI** — measure naming, no hardcoded filters where parameters belong, RLS considered,
   model documentation updated.
-- **SSRS** — parameter defaults/validation, dataset query safety (parameterized, no injection),
-  layout/render sanity, no embedded credentials.
+- **SSRS** — pre-flight gate confirmed (`PREFLIGHT_STATUS = PASS`), schema-aware parameter panel
+  cell-definition synchronization, parameter references resolvable, dataset query parameters
+  mapped, dataset `<Fields>` structurally valid, layout/render sanity, no embedded credentials,
+  clear separation of the 5 failure domains (RDL structural, SQL validation, DB connectivity,
+  DB execution, SSRS rendering).
 - **SQL** — parameterized (no injection), set-based over row-by-row where feasible, index/plan
   considerations noted, transaction/error handling present.
 

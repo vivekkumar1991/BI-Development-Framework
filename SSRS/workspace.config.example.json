@@ -7,16 +7,40 @@
   "_connections_note": "Model: Logical Data Source -> Connection Profile -> Physical Environment. The physical host/server stays developer-local; other developers map the same logical name to their own environment. Never commit real server names or secrets.",
 
   "connectionProfiles": {
-    "<profile-name e.g. local-sales-sql>": {
+    "<profile-name-for-server-a>": {
       "engine": "<sqlserver | databricks>",
-      "database": "<DATABASE_OR_CATALOG>",
+      "endpoint": "<DEVELOPER_LOCAL_SERVER_A_ENDPOINT>",
+      "database": "<DEVELOPER_LOCAL_SERVER_A_DATABASE_OR_CATALOG>",
       "schema": "<OPTIONAL_SCHEMA>",
       "auth": "<windows | sso | env | credential-manager | org-secret-provider>",
+      "catalog": {
+        "logicalCatalog": "<logical-catalog-for-server-a>",
+        "endpoint": "<DEVELOPER_LOCAL_CATALOG_A_ENDPOINT>",
+        "database": "<DEVELOPER_LOCAL_CATALOG_A_DATABASE>",
+        "schema": "<OPTIONAL_CATALOG_SCHEMA>",
+        "_note": "Catalog mapping for this profile only. Use targeted read-only lookups; never commit real endpoints, database names, credentials, passwords, or tokens."
+      },
+      "_endpoint_note": "Physical server/host/http-path lives only in your local copy; prefer approved auth. Never paste passwords or tokens here or into chat."
+    },
+    "<profile-name-for-server-b>": {
+      "engine": "<sqlserver | databricks>",
+      "endpoint": "<DEVELOPER_LOCAL_SERVER_B_ENDPOINT>",
+      "database": "<DEVELOPER_LOCAL_SERVER_B_DATABASE_OR_CATALOG>",
+      "schema": "<OPTIONAL_SCHEMA>",
+      "auth": "<windows | sso | env | credential-manager | org-secret-provider>",
+      "catalog": {
+        "logicalCatalog": "<logical-catalog-for-server-b>",
+        "endpoint": "<DEVELOPER_LOCAL_CATALOG_B_ENDPOINT>",
+        "database": "<DEVELOPER_LOCAL_CATALOG_B_DATABASE>",
+        "schema": "<OPTIONAL_CATALOG_SCHEMA>",
+        "_note": "Catalog mapping for this profile only. Use targeted read-only lookups; never commit real endpoints, database names, credentials, passwords, or tokens."
+      },
       "_endpoint_note": "Physical server/host/http-path lives only in your local copy; prefer approved auth. Never paste passwords or tokens here or into chat."
     }
   },
 
   "logicalDataSources": {
-    "<LogicalDataSourceName e.g. SalesDB>": "<profile-name e.g. local-sales-sql>"
+    "<logical-data-source-for-server-a>": "<profile-name-for-server-a>",
+    "<logical-data-source-for-server-b>": "<profile-name-for-server-b>"
   }
 }

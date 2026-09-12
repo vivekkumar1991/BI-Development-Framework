@@ -69,6 +69,7 @@ Load **only** the skills a request needs (token efficiency — see
 | Add column to a tablix | `rdl-analysis`, `tablix`, `expressions`, `rdl-minimal-editing`, `validation` |
 | Drillthrough/subreport | `rdl-analysis`, `drillthrough-navigation` / `subreports`, `impact-analysis`, `validation` |
 | Optimize rendering | `rdl-analysis`, `pagination-rendering`, `impact-analysis`, `validation` |
+| Stored Procedure to inline SQL | `rdl-analysis`, `datasets`, `rdl-minimal-editing`, `validation` + SQL `SP_TO_INLINE` handoff |
 
 Do not restate security / Git / documentation policy — reference the canonical
 [`instructions/`](../instructions/).
@@ -80,20 +81,40 @@ Do not restate security / Git / documentation policy — reference the canonical
    (SSRS section), the relevant skills only, and any `../templates/ssrs/` scaffolds.
 3. **Precheck (before any edit):** read `SSRS/workspace.config.json`; verify `projectRoot`
    exists and contains a `.sln`/`.rptproj`.
-4. **Discover the target RDL** under `projectRoot` (see
-   [`report-discovery`](../SSRS/skills/report-discovery.md)). If several `.rdl` files are
-   equally plausible, **ask for clarification** — do not guess. Verify the chosen `.rdl` exists.
+4. **Resolve and lock the target RDL** using
+   [`report-discovery`](../SSRS/skills/report-discovery.md). Resolve the local
+   Solution/Project before consulting any Catalog. Search the project source root for
+   non-artifact RDLs even when a matching RDL is absent from the `.rptproj`; exactly one
+   genuine source match is the only modification target. If multiple genuine source RDLs
+   match, ask the user to choose. If none matches, stop and ask for the correct local
+   RDL/Project, including when a Catalog report exists. Catalog content is read-only evidence
+   only and can never replace the locked local RDL.
 5. **Inspect the RDL** and identify dependencies before any structural or destructive change
    (see [`rdl-analysis`](../SSRS/skills/rdl-analysis.md) and
    [`impact-analysis`](../SSRS/skills/impact-analysis.md)).
 6. Produce the deliverable:
    - **Create / Analyze:** report spec, dataset query, parameter design (or documentation).
-   - **Modify / Debug / Optimize:** apply the **smallest possible patch** to the `.rdl`
-     **in place** under `projectRoot` (see [`rdl-minimal-editing`](../SSRS/skills/rdl-minimal-editing.md))
+    - **Modify / Debug / Optimize:** apply the **smallest possible patch** to the locked `.rdl`
+       **in place** under `projectRoot` (see [`rdl-minimal-editing`](../SSRS/skills/rdl-minimal-editing.md))
      so changes are immediately visible in SSDT. Do not copy RDLs into the repo workspace.
-7. **Focused structural validation** (see [`validation`](../SSRS/skills/validation.md) and
-   [`instructions/validation.md`](../instructions/validation.md)): valid XML, namespace
-   preserved, references resolve, no unexpected broad diff.
+7. **Pre-flight structural validation & risk gate** (see [`validation`](../SSRS/skills/validation.md) and
+   [`instructions/validation.md`](../instructions/validation.md)):
+   - Run risk-based pre-flight validation to detect RDL/SSDT definition errors *before* preview,
+     deployment, or execution.
+   - Evaluate `PREFLIGHT_STATUS = PASS | FAIL | CLARIFICATION_REQUIRED`.
+   - **Safe Auto-Fix:** If a deterministic defect is found (such as parameter-count vs parameter-panel
+     cell-definition mismatch in 2016/01 schema), apply the minimal safe auto-fix (reconciling
+     `<CellDefinitions>` without altering business logic or upgrading schema) and re-validate.
+   - If validation yields `FAIL` or `CLARIFICATION_REQUIRED`, block preview/deployment and surface
+     the standard error presentation:
+     ```text
+     SSRS PREFLIGHT VALIDATION FAILED
+     Severity: BLOCKING
+     Category: <Category>
+     Issue: <Description>
+     Action: Report preview/deployment was blocked.
+     Suggested fix: <Actionable fix>
+     ```
 8. **Hand off to the [Validation Agent](validation-agent.md).**
 9. Show a **concise change summary**; report what remains user-gated (commit/deploy/subscription)
    and that visual/render verification is a developer/SSDT step.
@@ -119,7 +140,11 @@ When the user requests a **new parameter**:
 5. The SQL Agent returns the query + validation/evidence.
 6. The SSRS Agent then wires: the parameter, available values, value field, label field — and
    report **filtering/query binding only when explicitly required**.
-7. Creating a parameter does **not** imply the report must be filtered by it. If filtering
+7. **Synchronize Parameter Panel Layout (Schema-Aware):** On 2016/01 schemas, maintain
+   `<ReportParametersLayout>` cells in lockstep with defined parameters (see
+   [`parameters`](../SSRS/skills/parameters.md)). On 2010/01 and older schemas, do not add
+   layout metadata and never upgrade the schema.
+8. Creating a parameter does **not** imply the report must be filtered by it. If filtering
    behavior is ambiguous, **ask before changing report logic**.
 
 ## SQL handoff
@@ -128,6 +153,16 @@ When a dataset query or parameter lookup is needed, hand off to the [SQL Agent](
 using the contract in [`instructions/agent-handoff.md`](../instructions/agent-handoff.md).
 The SSRS Agent **owns all RDL modifications**; the SQL Agent **owns SQL** and **never edits
 the RDL**. Do not duplicate SQL-agent reasoning here.
+
+For a report-specific change to a dataset that uses `CommandType` `StoredProcedure`, send an
+`SP_TO_INLINE` handoff containing the RDL data-source evidence, original procedure reference,
+existing `QueryParameters` mappings, and requested change. Do not edit the RDL unless the SQL
+Agent returns an approved `SAFE_CANDIDATE` (`REPORT_LOCAL_SQL`) or approved `REPORT_SCOPED_QUERY`
+handoff with full provenance and 1:1 parameter/output contract verification. For that approved result,
+use [`datasets`](../SSRS/skills/datasets.md) and [`rdl-minimal-editing`](../SSRS/skills/rdl-minimal-editing.md)
+to make only the target dataset change within the strict Change Scope / Diff Guard boundary.
+`REVIEW_REQUIRED` and `DO_NOT_AUTO_CONVERT` stop without an RDL edit. The SSRS Agent
+never modifies the original procedure.
 
 ## Guardrails
 
