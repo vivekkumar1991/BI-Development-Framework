@@ -23,7 +23,7 @@ the canonical [`instructions/`](../../instructions/) and is referenced, not rest
 | [`report-discovery`](report-discovery.md) | Locate the target `.rdl` under `projectRoot`; disambiguate. |
 | [`rdl-analysis`](rdl-analysis.md) | Read an RDL's structure, datasets, params, items, references. |
 | [`rdl-minimal-editing`](rdl-minimal-editing.md) | Apply the smallest patch; preserve everything unrelated. |
-| [`parameters`](parameters.md) | Free-form vs selectable report parameters. |
+| [`parameters`](parameters.md) | Free-form vs selectable report parameters and schema-aware layout synchronization. |
 | [`datasets`](datasets.md) | Embedded/shared datasets, fields, query binding. |
 | [`tablix`](tablix.md) | Tables/matrices/lists: rows, columns, groups, cells. |
 | [`expressions`](expressions.md) | SSRS/VB expressions, aggregates, field references. |
@@ -33,6 +33,6 @@ the canonical [`instructions/`](../../instructions/) and is referenced, not rest
 | [`subreports`](subreports.md) | Subreport items and parameter passing. |
 | [`pagination-rendering`](pagination-rendering.md) | Page breaks, size/margins, render performance. |
 | [`impact-analysis`](impact-analysis.md) | Dependencies affected before structural/destructive change. |
-| [`validation`](validation.md) | Focused structural RDL checks after an edit. |
+| [`validation`](validation.md) | Pre-flight schema-aware structural checks, parameter layout reconciliation, and risk gating. |
 
 See the [agent handoff contract](../../instructions/agent-handoff.md) for SSRS → SQL work.

@@ -38,11 +38,13 @@ the relevant section before producing anything; the Validation Agent checks agai
 - One dataset per logical need; parameterize all filters.
 - Provide sensible parameter defaults and validation.
 - Keep expressions simple; push logic to the SQL layer where it belongs.
+- Stored Procedure datasets: treat procedures as immutable shared dependencies; implement report-specific changes as report-local inline SQL when classified `SAFE_CANDIDATE`.
 
 ### SQL
 - **Parameterized** always; never concatenate input into SQL.
 - **Set-based** over cursors/row-by-row unless justified.
 - Schema-qualify object references (`schema.object`).
+- **Stored Procedures are immutable shared dependencies:** never `ALTER`, `CREATE OR ALTER`, `CREATE`, or `DROP` shared procedures or database objects. Report-specific changes are implemented query-local or report-local only.
 - Include error handling (`TRY...CATCH`) and explicit transactions for multi-statement writes.
 - Write **sargable** predicates; avoid wrapping filtered columns in functions.
 

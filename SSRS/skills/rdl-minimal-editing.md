@@ -15,8 +15,34 @@ RDL** when a targeted change is possible.
    expressions, datasets, parameters, layout, **names/IDs**, and formatting.
 3. Match the file's existing indentation/style; do not reformat untouched regions.
 4. Keep GUIDs/`rd:` designer attributes intact unless the change specifically requires them.
-5. Edit **in place** at the path under `projectRoot` (visible immediately in SSDT).
-6. After editing, expect a **narrow diff** — a broad diff is a red flag; stop and review.
+5. **Schema-aware metadata synchronization:** when adding, renaming, or removing parameters in
+   a 2016/01 schema RDL with `<ReportParametersLayout>`, keep `<CellDefinitions>` synchronized
+   in lockstep. Never introduce layout elements into 2010/01 or older schemas, and never upgrade
+   the RDL schema version.
+6. Edit **in place** at the path under `projectRoot` (visible immediately in SSDT).
+7. After editing, expect a **narrow diff** — a broad diff is a red flag; stop and review.
+
+## Change Scope & Diff Guard (Phase 8)
+
+For any report-local SQL or structural change, validate the diff boundary before accepting the patch:
+
+### Expected Diff Scope (Allowed):
+- Target `<DataSet>` query node (`<CommandText>`, `<CommandType>`).
+- Target `<DataSet>` `<Fields>` list (new/modified fields required by the change only).
+- Associated parameter or layout definitions explicitly requested.
+
+### Unexpected Diff Scope (Strictly Blocked $\rightarrow$ `REVIEW_REQUIRED`):
+- Unrelated datasets or data sources.
+- Unrelated parameters or parameter panel layout cells.
+- Report layout items (Tablix, Rectangle, Chart, Matrix) unless explicitly requested.
+- Page dimensions, margins, headers, footers, or orientation.
+- Formatting styles (font, color, borders, padding) of unrelated textboxes.
+- Unrelated expressions, filters, groups, or actions.
+- Solution/project files (`.rptproj`, `.sln`).
+- Workspace configuration files (`workspace.config.json`).
+- Unrelated framework files.
+
+*Any unexpected diff beyond the strict target scope halts the workflow with `REVIEW_REQUIRED`.*
 
 ## Output
 
